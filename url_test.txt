@@ -1,0 +1,9 @@
+http://pli.ski/
+
+https://pli.ski/
+https://pli.ski/nope.html
+https://false.pli.ski/
+not an url
+http://dudedu.de/
+https://dudedu.de/
+
