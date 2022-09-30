@@ -26,6 +26,8 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+
+	action "urlcheck/action"
 	"urlcheck/model"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -35,6 +37,8 @@ import (
 var (
 	Verbose     = false
 	authorFlag  bool
+	timeout     uint // seconds
+	statusFlag  bool
 	urlFilename string
 	uriList     UriList
 )
@@ -84,6 +88,13 @@ var rootCmd = &cobra.Command{
 			return errors.New("nothing to do")
 		}
 
+		if statusFlag {
+			if action.IsStatusOK(uriList.entry[0], timeout) {
+				os.Exit(0)
+			}
+			os.Exit(-1)
+		}
+
 		model := model.NewModel(uriList.entry)
 		err := tea.NewProgram(model).Start()
 		return err
@@ -105,6 +116,8 @@ func Execute() {
 
 func init() {
 	uriList = NewUriList()
+	rootCmd.PersistentFlags().UintVarP(&timeout, "timeout", "t", 10, "http call timeout (in seconds)")
+	rootCmd.PersistentFlags().BoolVarP(&statusFlag, "status", "s", false, "minimal check for http status code (intended for inline use)")
 	rootCmd.PersistentFlags().BoolVarP(&authorFlag, "author", "a", false, "author name for copyright attribution")
-	rootCmd.PersistentFlags().StringVarP(&urlFilename, "filename", "f", "", "name of the file containign the of URLs to check.")
+	rootCmd.PersistentFlags().StringVarP(&urlFilename, "filename", "f", "", "name of the file containing the list of URLs to check.")
 }
