@@ -28,7 +28,8 @@ import (
 	"os"
 
 	action "urlcheck/action"
-	"urlcheck/model"
+	cliState "urlcheck/cliState"
+	model "urlcheck/model"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
@@ -40,7 +41,7 @@ var (
 	timeout     uint // seconds
 	statusFlag  bool
 	urlFilename string
-	uriList     UriList
+	uriList     model.UriList
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -84,18 +85,18 @@ var rootCmd = &cobra.Command{
 			return nil
 		}
 
-		if len(uriList.entry) == 0 {
+		if len(uriList.Entry) == 0 {
 			return errors.New("nothing to do")
 		}
 
 		if statusFlag {
-			if action.IsStatusOK(uriList.entry[0], timeout) {
+			if action.IsStatusOK(uriList.Entry[0], timeout) {
 				os.Exit(0)
 			}
 			os.Exit(-1)
 		}
 
-		model := model.NewModel(uriList.entry)
+		model := cliState.NewModel(uriList.Entry)
 		err := tea.NewProgram(model).Start()
 		return err
 
@@ -115,7 +116,7 @@ func Execute() {
 }
 
 func init() {
-	uriList = NewUriList()
+	uriList = model.NewUriList()
 	rootCmd.PersistentFlags().UintVarP(&timeout, "timeout", "t", 10, "http call timeout (in seconds)")
 	rootCmd.PersistentFlags().BoolVarP(&statusFlag, "status", "s", false, "minimal check for http status code (intended for inline use)")
 	rootCmd.PersistentFlags().BoolVarP(&authorFlag, "author", "a", false, "author name for copyright attribution")

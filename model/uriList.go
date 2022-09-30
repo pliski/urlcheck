@@ -1,4 +1,4 @@
-package cmd
+package model
 
 import (
 	"bufio"
@@ -9,16 +9,16 @@ import (
 )
 
 type UriList struct {
-	entry []string
+	Entry []string
 }
 
 func NewUriList() UriList {
 	u := make([]string, 0, 100)
-	return UriList{entry: u}
+	return UriList{Entry: u}
 }
 
 func (u *UriList) UriListFromArgs(args []string) {
-	u.entry = append(u.entry, args...)
+	u.Entry = append(u.Entry, args...)
 }
 
 func (u *UriList) UriListFromFile(uriFilename string) error {
@@ -52,7 +52,7 @@ func (u *UriList) parseFile(uriFilename string) error {
 			}
 		} else {
 			// Store the uri
-			u.entry = append(u.entry, line)
+			u.Entry = append(u.Entry, line)
 		}
 
 	}
@@ -61,7 +61,7 @@ func (u *UriList) parseFile(uriFilename string) error {
 		return err
 	}
 
-	if len(u.entry) == 0 {
+	if len(u.Entry) == 0 {
 		errMsg := fmt.Sprintln("No valid uri in ", uriFilename)
 		return errors.New(errMsg)
 	}
@@ -69,9 +69,9 @@ func (u *UriList) parseFile(uriFilename string) error {
 	return nil
 }
 
-func (u *UriList) Dump() {
-	fmt.Println("len", len(u.entry))
-	for i := 0; i < len(u.entry); i++ {
-		fmt.Println("list", i, u.entry[i])
-	}
-}
+// func (u *UriList) Dump() {
+// 	fmt.Println("len", len(u.Entry))
+// 	for i := 0; i < len(u.Entry); i++ {
+// 		fmt.Println("list", i, u.Entry[i])
+// 	}
+// }

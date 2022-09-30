@@ -1,4 +1,4 @@
-package model
+package appState
 
 import (
 	"urlcheck/action"
