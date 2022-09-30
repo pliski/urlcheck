@@ -23,7 +23,6 @@ else
 fi
 ```
 
-
 ## Dependencies
 
 * [bubble tea](https://github.com/charmbracelet/bubbletea/tree/master/tutorials/commands/)
@@ -34,5 +33,6 @@ fi
 
 - [ ] use timeoutRoundTripper instead of http.Cliet.Get also for urlist checking in urlcheck.go
 - [ ] -s flag : check also for the whole urilist and exit at the first fail
+- [ ] feat: continuous mode with retry interval
 
 

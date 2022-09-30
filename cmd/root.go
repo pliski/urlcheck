@@ -81,7 +81,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		if authorFlag {
-			fmt.Println("Author: pliski <pliski@pli.ski>")
+			fmt.Fprintln(os.Stdout, "Author: pliski <pliski@pli.ski>")
 			return nil
 		}
 
@@ -109,7 +109,7 @@ func Execute() {
 
 	err := rootCmd.Execute()
 	if err != nil {
-		// fmt.Fprintln(os.Stderr, err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 

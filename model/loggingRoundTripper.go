@@ -1,35 +1,29 @@
 package model
 
 import (
-	"fmt"
-	"io"
 	"net/http"
-	"os"
-	"time"
 )
 
 type loggingRoundTripper struct {
-	next http.RoundTripper
-	info io.Writer
-	err  io.Writer
+	next   http.RoundTripper
+	logger *StdLogger
 }
 
-func NewLoggingRoundTripper(next http.RoundTripper, info io.Writer, err io.Writer) *loggingRoundTripper {
+func NewLoggingRoundTripper(next http.RoundTripper, logger *StdLogger) *loggingRoundTripper {
 	return &loggingRoundTripper{
-		next: http.DefaultTransport,
-		info: os.Stdout,
-		err:  os.Stderr,
+		next:   http.DefaultTransport,
+		logger: logger,
 	}
 }
 
-func (logger loggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
+func (t loggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	// Info log
-	fmt.Fprintf(logger.info, "[%s] %s %s\n", time.Now().Format(time.ANSIC), r.Method, r.URL.String())
+	t.logger.Info(r.URL.String(), "Requesting...")
 
 	// Response error log
-	res, err := logger.next.RoundTrip(r)
+	res, err := t.next.RoundTrip(r)
 	if err != nil {
-		fmt.Fprintf(logger.err, "[%s] ERROR %s %s %s \n", time.Now().Format(time.ANSIC), err.Error(), r.Method, r.URL.String())
+		t.logger.Error(r.URL.String(), err.Error())
 	}
 	return res, err
 }
