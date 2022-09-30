@@ -8,14 +8,21 @@ import (
 	"urlcheck/model"
 )
 
-func IsStatusOK(urlRequest string, timeout uint) bool {
-	return getStatus(urlRequest, time.Duration(timeout)*time.Second) < http.StatusInternalServerError
+type ClientModel[L model.LoggerURl] struct {
+	logger *L
+	client *http.Client
 }
 
-func getStatus(urlRequest string, timeout time.Duration) int {
+func IsStatusOK(urlRequest string, timeout uint) bool {
+	// Client
+	var clientModel *ClientModel[model.StdLogger] = NewClient()
 
+	return getStatus(urlRequest, time.Duration(timeout)*time.Second, clientModel) < http.StatusInternalServerError
+}
+
+func NewClient() *ClientModel[model.StdLogger] {
 	// shared Logger
-	logger := model.NewStdLogger()
+	var logger *model.StdLogger = model.NewStdLogger()
 
 	// Client
 	client := &http.Client{
@@ -24,6 +31,34 @@ func getStatus(urlRequest string, timeout time.Duration) int {
 			logger,
 		),
 	}
+
+	cm := ClientModel[model.StdLogger]{
+		logger,
+		client,
+	}
+
+	return &cm
+}
+
+func NewClientTea(errList *[]string) *ClientModel[model.TeaLogger] {
+	// shared Logger
+	logger := model.NewTeaLogger(errList)
+
+	// Client
+	client := &http.Client{
+		Transport: http.DefaultTransport,
+	}
+
+	return &ClientModel[model.TeaLogger]{
+		logger,
+		client,
+	}
+}
+
+func getStatus[L model.LoggerURl](urlRequest string, timeout time.Duration, clientModel *ClientModel[L]) int {
+
+	var cm *ClientModel[L] = clientModel
+	var logger L = *cm.logger
 
 	// Request
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -37,13 +72,13 @@ func getStatus(urlRequest string, timeout time.Duration) int {
 	req = req.WithContext(ctx)
 
 	// Status
-	status, statusCode := sendRequest(client, req, logger)
+	status, statusCode := sendRequest(clientModel.client, req, logger)
 	logger.Info(urlRequest, status)
 	return statusCode
 
 }
 
-func sendRequest(c *http.Client, req *http.Request, logger *model.StdLogger) (string, int) {
+func sendRequest[L model.LoggerURl](c *http.Client, req *http.Request, logger L) (string, int) {
 	res, err := c.Do(req)
 	if err != nil {
 		// The error will already be logged by loggingRoundTripper

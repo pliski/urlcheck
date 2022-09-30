@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"time"
 )
 
 type StdLogger struct {
@@ -37,8 +36,4 @@ func (logger StdLogger) Out(url string, msg string) {
 	if msg != "" {
 		fmt.Fprintf(logger.out, "%s: %s \n", url, msg)
 	}
-}
-
-func now() string {
-	return time.Now().Format(time.ANSIC)
 }

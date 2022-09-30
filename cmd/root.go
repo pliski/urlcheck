@@ -53,7 +53,6 @@ var rootCmd = &cobra.Command{
 	Accepts:
 	- a single url, 
 	- a filename containing one url per line `,
-	// - by default search in ~/.config/urlcheck/sites.txt`,
 
 	Args: func(cmd *cobra.Command, args []string) error {
 		for i := 0; i < len(args); i++ {

@@ -3,6 +3,7 @@ package action
 import (
 	"net/http"
 	"time"
+	"urlcheck/model"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -15,6 +16,16 @@ func CheckSomeUrl(url string) tea.Cmd {
 			return ErrMsg{err, false}
 		}
 		return StatusMsg(res.StatusCode)
+	}
+}
+
+func CheckSomeHeaders(url string, client *ClientModel[model.TeaLogger]) tea.Cmd {
+	return func() tea.Msg {
+		status := getStatus(url, time.Duration(10)*time.Second, client)
+		if status == 999 {
+			status = 0
+		}
+		return StatusMsg(status)
 	}
 }
 
