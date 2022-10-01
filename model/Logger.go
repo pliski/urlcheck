@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type LoggerURl interface {
+type Logger interface {
 	StdLogger | TeaLogger
 	Error(url string, msg string)
 	Info(url string, msg string)

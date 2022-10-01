@@ -8,7 +8,7 @@ import (
 	"urlcheck/model"
 )
 
-type ClientModel[L model.LoggerURl] struct {
+type ClientModel[L model.Logger] struct {
 	logger *L
 	client *http.Client
 }
@@ -55,7 +55,7 @@ func NewClientTea(errList *[]string) *ClientModel[model.TeaLogger] {
 	}
 }
 
-func getStatus[L model.LoggerURl](urlRequest string, timeout time.Duration, clientModel *ClientModel[L]) int {
+func getStatus[L model.Logger](urlRequest string, timeout time.Duration, clientModel *ClientModel[L]) int {
 
 	var cm *ClientModel[L] = clientModel
 	var logger L = *cm.logger
@@ -78,7 +78,7 @@ func getStatus[L model.LoggerURl](urlRequest string, timeout time.Duration, clie
 
 }
 
-func sendRequest[L model.LoggerURl](c *http.Client, req *http.Request, logger L) (string, int) {
+func sendRequest[L model.Logger](c *http.Client, req *http.Request, logger L) (string, int) {
 	res, err := c.Do(req)
 	if err != nil {
 		// The error will already be logged by loggingRoundTripper
