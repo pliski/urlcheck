@@ -2,6 +2,8 @@
 
 CLI tool for checking the http responses for a given list of URLs.
 
+There are curently 2 ways of using `urlcheck` the standard way and the "inline" way (using the -s option) that return an exit code > 0 in case of error, a timeout or an http status code < 500 
+
 Usage:
 
 ```sh
