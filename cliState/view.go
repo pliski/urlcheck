@@ -1,4 +1,4 @@
-package appState
+package cliState
 
 import (
 	"fmt"

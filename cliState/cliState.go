@@ -1,4 +1,4 @@
-package appState
+package cliState
 
 import (
 	"github.com/pliski/urlcheck/action"

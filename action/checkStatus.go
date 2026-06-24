@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"time"
+
 	"github.com/pliski/urlcheck/model"
 )
 
