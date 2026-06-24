@@ -11,7 +11,7 @@ type loggingRoundTripper struct {
 
 func NewLoggingRoundTripper(next http.RoundTripper, logger *StdLogger) *loggingRoundTripper {
 	return &loggingRoundTripper{
-		next:   http.DefaultTransport,
+		next:   next,
 		logger: logger,
 	}
 }
@@ -19,6 +19,11 @@ func NewLoggingRoundTripper(next http.RoundTripper, logger *StdLogger) *loggingR
 func (t loggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	// Info log
 	t.logger.Info(r.URL.String(), "Requesting...")
+
+	// The http.RoundTripper contract forbids mutating the caller's request,
+	// so clone it before adding the no-cache headers.
+	r = r.Clone(r.Context())
+	SetNoCacheHeaders(r.Header)
 
 	// Response error log
 	res, err := t.next.RoundTrip(r)

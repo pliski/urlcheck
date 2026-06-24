@@ -4,13 +4,20 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/pliski/urlcheck/model"
+
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func CheckSomeUrl(url string) tea.Cmd {
 	return func() tea.Msg {
 		c := &http.Client{Timeout: 10 * time.Second}
-		res, err := c.Get(url)
+		req, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return ErrMsg{err, false}
+		}
+		model.SetNoCacheHeaders(req.Header)
+		res, err := c.Do(req)
 		if err != nil {
 			return ErrMsg{err, false}
 		}
