@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"time"
-	"urlcheck/model"
+	"github.com/pliski/urlcheck/model"
 )
 
 func IsStatusOK(urlRequest string, timeout uint) bool {

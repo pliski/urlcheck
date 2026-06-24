@@ -1,7 +1,7 @@
 package main
 
 import (
-	"urlcheck/cmd"
+	"github.com/pliski/urlcheck/cmd"
 )
 
 func main() {

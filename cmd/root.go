@@ -27,9 +27,9 @@ import (
 	"net/url"
 	"os"
 
-	action "urlcheck/action"
-	cliState "urlcheck/cliState"
-	model "urlcheck/model"
+	action "github.com/pliski/urlcheck/action"
+	cliState "github.com/pliski/urlcheck/cliState"
+	model "github.com/pliski/urlcheck/model"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"

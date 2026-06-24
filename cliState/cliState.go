@@ -1,7 +1,7 @@
 package appState
 
 import (
-	"urlcheck/action"
+	"github.com/pliski/urlcheck/action"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

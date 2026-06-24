@@ -4,19 +4,27 @@ CLI tool for checking the http responses for a given list of URLs.
 
 ## Install
 
-Install a static binary from a clone (the module is not published for remote
-`go install`):
+One-line remote install (`CGO_ENABLED=0` builds a static binary so it runs on
+NixOS too):
+
+```sh
+CGO_ENABLED=0 go install github.com/pliski/urlcheck@latest
+```
+
+Or build from a clone:
 
 ```sh
 git clone git@github.com:pliski/urlcheck.git
 cd urlcheck
-make install   # static binary into $GOBIN (defaults to `$(go env GOPATH)/bin`)
+make install
 ```
 
-Make sure that directory is on your `PATH`. On NixOS this static build matters:
-a plain `go install` produces a dynamically linked binary that fails with
-"Could not start dynamically linked executable". `make install` sets
-`CGO_ENABLED=0` to avoid that — see [Build](#build) for details.
+Either way the binary lands in `$GOBIN` (defaults to `$(go env GOPATH)/bin`);
+make sure that directory is on your `PATH`.
+
+The `CGO_ENABLED=0` matters on NixOS: a plain `go install` produces a
+dynamically linked binary that fails with "Could not start dynamically linked
+executable". See [Build](#build) for details.
 
 Usage:
 

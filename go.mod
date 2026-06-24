@@ -1,4 +1,4 @@
-module urlcheck
+module github.com/pliski/urlcheck
 
 go 1.18
 
