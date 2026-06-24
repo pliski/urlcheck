@@ -79,5 +79,6 @@ built on.
 - [ ] use timeoutRoundTripper instead of http.Cliet.Get also for urlist checking in urlcheck.go
 - [ ] -s flag : check also for the whole urilist and exit at the first fail
 - [ ] feat: continuous mode with retry interval
+- [x] rename module to its import path so it installs with `go install github.com/pliski/urlcheck@latest`
 
 
